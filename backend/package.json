@@ -1,0 +1,67 @@
+{
+  "name": "forbra",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start:dev": "nodemon --watch \"**/*.ts\" --exec \"tsx\" server.mts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/stack": "^6.4.1",
+    "@types/express": "^4.17.21",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.6.0",
+    "react-native-gesture-handler": "^2.19.0",
+    "react-native-reanimated": "^3.15.1",
+    "socket.io": "^4.7.5",
+    "tsconfig-paths": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.7",
+    "@babel/preset-typescript": "^7.25.7",
+    "@testing-library/react-native": "^12.7.2",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^22.8.3",
+    "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
+    "esm": "^3.2.25",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.0.5",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|my-project|react-native-button)/)"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.jest.json"
+      }
+    }
+  }
+}

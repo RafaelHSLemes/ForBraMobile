@@ -1,7 +1,7 @@
 // src/App.tsx
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen/LoginScreen';
 import HomeScreen from './screens/HomeScreen/HomeScreen';
@@ -17,10 +17,23 @@ export type RootStackParamList = {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+// Configuração de Deep Linking
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ['http://localhost:8081'], // Adicione aqui o prefixo para o ambiente de desenvolvimento
+  config: {
+    screens: {
+      Login: 'login',
+      Home: 'home',
+      Chat: 'chat/:userId',
+      ExploreNearby: 'explore',
+    },
+  },
+};
+
 const App: React.FC = () => {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen 
             name="Login" 
@@ -31,7 +44,7 @@ const App: React.FC = () => {
             name="Home" 
             component={HomeScreen} 
             options={{ 
-              headerTitle: 'Home', 
+              headerTitle: 'Forbra - Home', 
               headerStyle: { backgroundColor: '#1E90FF' }, 
               headerTintColor: '#fff' 
             }}

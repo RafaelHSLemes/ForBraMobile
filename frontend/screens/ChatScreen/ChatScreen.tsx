@@ -24,7 +24,7 @@ const ChatScreen: React.FC = () => {
       const user = JSON.parse(await AsyncStorage.getItem('user') || '{}');
       setUserId(user._id);
 
-      const newSocket = io('http://localhost:3000', {
+      const newSocket = io('http://localhost:8081', {
         auth: {
           token,
         },

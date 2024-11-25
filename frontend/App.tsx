@@ -7,8 +7,10 @@ import LoginScreen from './screens/LoginScreen/LoginScreen';
 import HomeScreen from './screens/HomeScreen/HomeScreen';
 import ChatScreen from './screens/ChatScreen/ChatScreen';
 import ExploreNearbyScreen from './screens/ExploreNearbyScreen/ExploreNearbyScreen';
+import SignupScreen from './screens/SignupScreen/SignupScreen';
 
 export type RootStackParamList = {
+  Cadastro: undefined;
   Login: undefined;
   Home: undefined;
   Chat: { userId: string };
@@ -22,6 +24,7 @@ const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['http://localhost:8081'], // Adicione aqui o prefixo para o ambiente de desenvolvimento
   config: {
     screens: {
+      Cadastro: 'register',
       Login: 'login',
       Home: 'home',
       Chat: 'chat/:userId',
@@ -39,6 +42,15 @@ const App: React.FC = () => {
             name="Login" 
             component={LoginScreen} 
             options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="Cadastro" 
+            component={SignupScreen} 
+            options={{ 
+              headerTitle: 'Forbra - Cadastro', 
+              headerStyle: { backgroundColor: '#1E90FF' }, 
+              headerTintColor: '#fff' 
+            }}
           />
           <Stack.Screen 
             name="Home" 

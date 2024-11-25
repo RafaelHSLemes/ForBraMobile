@@ -3,6 +3,7 @@ import React from 'react';
 import { View, TextInput, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import styles from '../LoginScreen/LoginScreen.styles'; // Importando o arquivo de estilos
 
 // Definindo os tipos de navegação e rota para a tela

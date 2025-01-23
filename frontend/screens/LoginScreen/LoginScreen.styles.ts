@@ -27,4 +27,11 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
   },
+  link: {
+    color: '#fff',
+    marginTop: 20,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
 });

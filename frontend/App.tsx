@@ -47,7 +47,7 @@ const App: React.FC = () => {
             name="Cadastro" 
             component={SignupScreen} 
             options={{ 
-              headerTitle: 'Forbra - Cadastro', 
+              headerTitle: 'helloworld - Cadastro', 
               headerStyle: { backgroundColor: '#1E90FF' }, 
               headerTintColor: '#fff' 
             }}
@@ -56,7 +56,7 @@ const App: React.FC = () => {
             name="Home" 
             component={HomeScreen} 
             options={{ 
-              headerTitle: 'Forbra - Home', 
+              headerTitle: 'helloworld - Home', 
               headerStyle: { backgroundColor: '#1E90FF' }, 
               headerTintColor: '#fff' 
             }}

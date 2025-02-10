@@ -1,83 +1,36 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-// Interface que define os tipos dos campos do documento Usuário
 interface IUser extends Document {
   nome: string;
   email: string;
   senha: string;
-  localizacao: {
-    latitude: number;
-    longitude: number;
-  };
   profissao: string;
+  localizacao: {
+    type: string;
+    coordinates: [number, number];
+  };
   interesses: string[];
-  dataDeNascimento?: Date; // Campo opcional
-  criadoEm: Date;
-  atualizadoEm: Date;
 }
 
-// Esquema do Mongoose para o Usuário
-const UserSchema: Schema<IUser> = new Schema(
-  {
-    nome: {
+const UserSchema = new Schema<IUser>({
+  nome: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  senha: { type: String, required: true },
+  profissao: { type: String, required: true },
+  localizacao: {
+    type: {
       type: String,
-      required: true,
-      trim: true, // Remove espaços desnecessários
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true, // Garante que o email seja único
-      trim: true,
-      lowercase: true, // Converte o email para minúsculas
-    },
-    senha: {
-      type: String,
+      enum: ['Point'],
       required: true,
     },
-    localizacao: {
-      latitude: {
-        type: Number,
-        required: true,
-      },
-      longitude: {
-        type: Number,
-        required: true,
-      },
-    },
-    profissao: {
-      type: String,
+    coordinates: {
+      type: [Number],
       required: true,
-    },
-    interesses: {
-      type: [String], // Array de strings para múltiplos interesses
-      default: [], // Array vazio como padrão
-    },
-    dataDeNascimento: {
-      type: Date,
-      required: false,
-    },
-    criadoEm: {
-      type: Date,
-      default: Date.now, // Define a data de criação automaticamente
-    },
-    atualizadoEm: {
-      type: Date,
-      default: Date.now,
     },
   },
-  {
-    timestamps: true, // Adiciona automaticamente 'createdAt' e 'updatedAt'
-  }
-);
-
-// Middleware para atualizar o campo 'atualizadoEm' antes de salvar
-UserSchema.pre<IUser>('save', function (next) {
-  this.atualizadoEm = new Date();
-  next();
+  interesses: { type: [String], required: true },
 });
 
-// Exporta o modelo do Usuário
-const UserModel: Model<IUser> = mongoose.model<IUser>('Usuario', UserSchema);
+const UserModel = mongoose.model<IUser>('User', UserSchema);
 
 export default UserModel;

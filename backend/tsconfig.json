@@ -1,0 +1,22 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2020",
+    "skipLibCheck": true,
+    "lib": ["ES6", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": ["jest", "cypress"],
+    "typeRoots": ["./node_modules/@types", "./types"]
+  },
+  "include": ["src", "cypress"],
+  "exclude": ["node_modules", "dist"],
+  "jest": {
+    "preset": "jest-expo"
+  }
+}

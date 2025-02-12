@@ -1,9 +1,5 @@
-import { IUser } from './path/to/your/UserModel'; // Ajuste o caminho conforme necessário
-
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser; // Torna a propriedade user opcional
-    }
+declare namespace Express {
+  export interface Request {
+    user?: { id: string; [key: string]: any };
   }
 }

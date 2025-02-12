@@ -1,5 +1,6 @@
 export default {
     e2e: {
-      baseUrl: 'http://http://localhost:8081//api/users',
+      baseUrl: 'http://localhost:3000',
+      supportFile: false
     },
   };  

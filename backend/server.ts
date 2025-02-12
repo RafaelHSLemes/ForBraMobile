@@ -2,7 +2,7 @@ import express from 'express'; // Importação correta quando esModuleInterop = 
 import { Request, Response, NextFunction } from 'express';
 import * as http from 'http';
 import mongoose from 'mongoose';
-import * as cors from 'cors';
+import cors from 'cors';
 import * as path from 'path'
 import { Server } from 'socket.io';
 import * as dotenv from 'dotenv';

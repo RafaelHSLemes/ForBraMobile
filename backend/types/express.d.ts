@@ -1,5 +1,7 @@
-declare namespace Express {
-  export interface Request {
-    user?: { id: string; [key: string]: any };
+import { IUser } from '../schemas/UserModel';
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: IUser;
   }
 }

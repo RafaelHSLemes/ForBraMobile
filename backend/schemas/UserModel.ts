@@ -6,7 +6,7 @@ interface IUser extends Document {
   senha: string;
   profissao: string;
   localizacao: {
-    type: string;
+    type: 'Point';
     coordinates: [number, number];
   };
   interesses: string[];
@@ -18,15 +18,8 @@ const UserSchema = new Schema<IUser>({
   senha: { type: String, required: true },
   profissao: { type: String, required: true },
   localizacao: {
-    type: {
-      type: String,
-      enum: ['Point'],
-      required: true,
-    },
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
+    type: { type: String, enum: ['Point'], required: true, default: 'Point' },
+    coordinates: { type: [Number], required: true },
   },
   interesses: { type: [String], required: true },
 });
@@ -34,3 +27,4 @@ const UserSchema = new Schema<IUser>({
 const UserModel = mongoose.model<IUser>('User', UserSchema);
 
 export default UserModel;
+export type { IUser };

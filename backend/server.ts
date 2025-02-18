@@ -9,7 +9,7 @@ import * as dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
 import chatHandler from './controllers/chatController';
 import UserModel from './schemas/UserModel';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 

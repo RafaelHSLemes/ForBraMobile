@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "helloworld"
+      "bundleIdentifier": "ForBra"
     },
     "android": {
       "adaptiveIcon": {

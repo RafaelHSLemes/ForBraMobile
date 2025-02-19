@@ -29,7 +29,7 @@ const LoginScreen: React.FC<Props> = () => {
   const handleLogin = async () => {
     try {
       console.log('[LOGIN] Tentativa de login para o e-mail:', email);
-      
+
       const response = await axios.post('http://localhost:3000/api/users/login', { email, password });
       console.log('[LOGIN] Resposta do backend:', response);
 
@@ -63,7 +63,7 @@ const LoginScreen: React.FC<Props> = () => {
           value={password}
           onChangeText={setPassword}
         />
-        <Button title="Login" onPress={handleLogin} color="#1E90FF" />
+        <Button title="Login" onPress={handleLogin} color="#009440" />
       </View>
       <TouchableOpacity onPress={() => navigation.navigate('Cadastro')} style={styles.link}>
         <Text style={styles.link}>Ainda não tem uma conta? Clique aqui para se cadastrar</Text>

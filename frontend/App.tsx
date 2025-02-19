@@ -38,45 +38,45 @@ const App: React.FC = () => {
     <SafeAreaProvider>
       <NavigationContainer linking={linking}>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen 
-            name="Login" 
-            component={LoginScreen} 
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen 
-            name="Cadastro" 
-            component={SignupScreen} 
-            options={{ 
-              headerTitle: 'helloworld - Cadastro', 
-              headerStyle: { backgroundColor: '#1E90FF' }, 
-              headerTintColor: '#fff' 
+          <Stack.Screen
+            name="Cadastro"
+            component={SignupScreen}
+            options={{
+              headerTitle: 'ForBra - Cadastro',
+              headerStyle: { backgroundColor: '#009440' },
+              headerTintColor: '#fff'
             }}
           />
-          <Stack.Screen 
-            name="Home" 
-            component={HomeScreen} 
-            options={{ 
-              headerTitle: 'helloworld - Home', 
-              headerStyle: { backgroundColor: '#1E90FF' }, 
-              headerTintColor: '#fff' 
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              headerTitle: 'ForBra - Home',
+              headerStyle: { backgroundColor: '#009440' },
+              headerTintColor: '#fff'
             }}
           />
-          <Stack.Screen 
-            name="Chat" 
-            component={ChatScreen} 
-            options={{ 
-              headerTitle: 'Chat', 
-              headerStyle: { backgroundColor: '#1E90FF' }, 
-              headerTintColor: '#fff' 
+          <Stack.Screen
+            name="Chat"
+            component={ChatScreen}
+            options={{
+              headerTitle: 'Chat',
+              headerStyle: { backgroundColor: '#009440' },
+              headerTintColor: '#fff'
             }}
           />
-          <Stack.Screen 
-            name="ExploreNearby" 
-            component={ExploreNearbyScreen} 
-            options={{ 
-              headerTitle: 'Explore Nearby', 
-              headerStyle: { backgroundColor: '#1E90FF' }, 
-              headerTintColor: '#fff' 
+          <Stack.Screen
+            name="ExploreNearby"
+            component={ExploreNearbyScreen}
+            options={{
+              headerTitle: 'Explore Nearby',
+              headerStyle: { backgroundColor: '#009440' },
+              headerTintColor: '#fff'
             }}
           />
         </Stack.Navigator>

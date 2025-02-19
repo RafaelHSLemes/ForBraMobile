@@ -138,7 +138,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.helloworld"
+        applicationId "com.example.ForBra"
         minSdk 21
         targetSdk 33
         versionCode 1

@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import {
+  ScrollView, View, Text, TextInput, Button, Alert, TouchableOpacity,
+  KeyboardAvoidingView, Platform
+} from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import axios from 'axios';
 import styles from './SignupScreen.styles';
+import { geocodeAddress } from '../../services/Register';
 
 type RootStackParamList = {
   Login: undefined;
@@ -11,97 +15,116 @@ type RootStackParamList = {
 
 const SignupScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [profession, setProfession] = useState<string>('');
-  const [localization, setLocalization] = useState<string>('');
-  const [interests, setInterests] = useState<string>('');
 
-  const handleSignup = async () => {
-    try {
-      // Validar entrada do endereço
-      if (!localization.trim()) {
-        Alert.alert('Erro', 'Por favor, insira um endereço válido.');
-        return;
+  const [form, setForm] = useState({
+    name: '', email: '', password: '', street: '', houseNumber: '',
+    neighborhood: '', city: '', state: '', country: '', zipCode: '',
+    profession: '', interests: [] as string[], interestInput: ''
+  });
+
+  const handleInputChange = (key: string, value: string) => {
+    setForm({ ...form, [key]: value });
+  };
+
+  const handleInterestInput = (text: string) => {
+    if (text.includes(' ')) {
+      const newTag = text.trim();
+      if (newTag && !form.interests.includes(newTag)) {
+        setForm({ ...form, interests: [...form.interests, newTag], interestInput: '' });
       }
-
-      // Obter coordenadas
-      const coordinates = await getCoordinates(localization.trim());
-
-      // Verificar se as coordenadas foram captadas corretamente
-      if (!coordinates) {
-        Alert.alert('Erro', 'Não foi possível obter a localização. Verifique o endereço.');
-        return;
-      }
-
-      // Enviar dados ao backend
-      const response = await axios.post('http://localhost:3000/api/users/register', {
-        nome: name.trim(),
-        email: email.trim(),
-        senha: password,
-        profissao: profession.trim(),
-        localizacao: {
-          type: 'Point',
-          coordinates: [coordinates.longitude, coordinates.latitude],
-        },
-        interesses: interests
-          .split(',')
-          .map((interest) => interest.trim())
-          .filter((interest) => interest), // Remove entradas vazias
-      });
-
-      Alert.alert('Sucesso', response.data.message || 'Usuário cadastrado com sucesso!');
-      navigation.navigate('Login');
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        Alert.alert('Erro', error.response.data.message || 'Erro no servidor');
-      } else if (error instanceof Error) {
-        Alert.alert('Erro', error.message);
-      } else {
-        Alert.alert('Erro', 'Erro inesperado ao registrar usuário');
-      }
+    } else {
+      setForm({ ...form, interestInput: text });
     }
   };
 
-  const getCoordinates = async (address: string) => {
+  const handleSignup = async () => {
     try {
-      const response = await axios.get('https://api.positionstack.com/v1/forward', {
-        params: {
-          access_key: '4d9ddcc9b7ea6b601550fa91f642fa9d',
-          query: address,
-          limit: 1, // Limita a resposta para evitar ambiguidades
-        },
-      });
-      const { data } = response;
+      // Obter coordenadas a partir do endereço
+      const coordinates = await geocodeAddress(
+        form.street, form.houseNumber, form.neighborhood,
+        form.city, form.state, form.country, form.zipCode
+      );
 
-      if (data?.data?.length > 0) {
-        const location = data.data[0];
-        // Verificar se latitude e longitude existem
-        if (location.latitude && location.longitude) {
-          return { latitude: location.latitude, longitude: location.longitude };
-        }
+      if (!coordinates) {
+        Alert.alert('Erro', 'Endereço inválido.');
+        return;
       }
-      throw new Error('Endereço não encontrado');
+
+      // Dados para envio ao backend
+      const userData = {
+        nome: form.name,
+        email: form.email,
+        senha: form.password,
+        endereco: {
+          logradouro: form.street,
+          numero: form.houseNumber,
+          bairro: form.neighborhood,
+          cidade: form.city,
+          estado: form.state,
+          pais: form.country,
+          CEP: form.zipCode,
+        },
+        localizacao: {
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        },
+        profissao: form.profession,
+        interesses: form.interests,
+      };
+
+      // Envio ao backend
+      const response = await axios.post('http://localhost:3000/api/users/register', userData);
+
+      if (response.status === 201) {
+        Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
+        navigation.navigate('Login'); // Redirecionar para a tela de login
+      } else {
+        Alert.alert('Erro', 'Erro ao registrar usuário.');
+      }
     } catch (error) {
-      throw new Error('Erro ao obter localização: ' + (error as Error).message);
+      Alert.alert('Erro', 'Erro inesperado ao registrar usuário.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Cadastro</Text>
-      <TextInput placeholder="Nome" value={name} onChangeText={setName} style={styles.input} />
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
-      <TextInput placeholder="Senha" value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
-      <TextInput placeholder="Profissão" value={profession} onChangeText={setProfession} style={styles.input} />
-      <TextInput placeholder="Endereço" value={localization} onChangeText={setLocalization} style={styles.input} />
-      <TextInput placeholder="Interesses (separados por vírgula)" value={interests} onChangeText={setInterests} style={styles.input} />
-      <Button title="Cadastrar" onPress={handleSignup} />
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Cadastro</Text>
+          <View style={styles.rowContainer}>
+            <TextInput placeholder="Nome" value={form.name} onChangeText={(text) => handleInputChange('name', text)} style={styles.input} />
+            <TextInput placeholder="Email" value={form.email} onChangeText={(text) => handleInputChange('email', text)} style={styles.input} keyboardType="email-address" />
+          </View>
+          <TextInput placeholder="Senha" value={form.password} onChangeText={(text) => handleInputChange('password', text)} style={styles.input} secureTextEntry />
+          <View style={styles.rowContainer}>
+            <TextInput placeholder="Rua" value={form.street} onChangeText={(text) => handleInputChange('street', text)} style={styles.input} />
+            <TextInput placeholder="Número" value={form.houseNumber} onChangeText={(text) => handleInputChange('houseNumber', text)} style={styles.input} keyboardType="numeric" />
+          </View>
+          <View style={styles.rowContainer}>
+            <TextInput placeholder="Bairro" value={form.neighborhood} onChangeText={(text) => handleInputChange('neighborhood', text)} style={styles.input} />
+            <TextInput placeholder="Cidade" value={form.city} onChangeText={(text) => handleInputChange('city', text)} style={styles.input} />
+          </View>
+          <View style={styles.rowContainer}>
+            <TextInput placeholder="Estado" value={form.state} onChangeText={(text) => handleInputChange('state', text)} style={styles.input} />
+            <TextInput placeholder="País" value={form.country} onChangeText={(text) => handleInputChange('country', text)} style={styles.input} />
+          </View>
+          <TextInput placeholder="CEP" value={form.zipCode} onChangeText={(text) => handleInputChange('zipCode', text)} style={styles.input} keyboardType="numeric" />
+          <TextInput placeholder="Profissão" value={form.profession} onChangeText={(text) => handleInputChange('profession', text)} style={styles.input} />
+          <TextInput placeholder="Adicione interesses e pressione espaço" value={form.interestInput} onChangeText={handleInterestInput} style={styles.input} />
+          <View style={styles.tagsContainer}>
+            {form.interests.map((interest, index) => (
+              <Text key={index} style={styles.tag}>{interest}</Text>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button title="Cadastrar" onPress={handleSignup} />
+      </View>
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.link}>Já possui uma conta? Clique aqui para entrar</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

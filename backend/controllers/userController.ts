@@ -32,7 +32,7 @@ export const registerUser = async (req: Request, res: Response) => {
       endereco,
       localizacao,
       profissao,
-      interesses,
+      interesses: Array.isArray(interesses) ? interesses : [interesses],
     });
 
     const savedUser = await user.save();
